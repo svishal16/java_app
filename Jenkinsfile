@@ -23,6 +23,7 @@ pipeline{
         '''.trim()
         SONAR_SERVER = 'java-app-sonar' 
         SONAR_PROJECT_KEY = 'java-app-cicd'
+        SONAR_PROJECT_NAME = 'java-app-cicd'
     }
 
 
