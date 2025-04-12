@@ -8,6 +8,11 @@ pipeline{
         maven 'MAVEN3.9'
     }
 
+    environment{
+        MAVEN_OPTS = '--add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED'
+    }
+
+
     stages{
         
         stage('Git Checkout'){
