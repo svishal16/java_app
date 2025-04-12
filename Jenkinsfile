@@ -4,6 +4,10 @@ pipeline{
 
     agent any
 
+    tools{
+        maven 'MAVEN3.9'
+    }
+
     stages{
         
         stage('Git Checkout'){
