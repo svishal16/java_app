@@ -30,9 +30,9 @@ pipeline{
 
     parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'choose create/destroy')
-        string(name: 'ImageName', description: "Name of the docker build", defaultvalue: 'javaapp')
-        string(name: 'ImageTag', description: "Tag of the docker build", defaultvalue: 'v1')
-        string(name: 'AppName', description: "Name of the Application", defaultvalue: 'springboot')
+        string(name: 'ImageName', description: "Name of the docker build", defaultValue: 'javaapp')
+        string(name: 'ImageTag', description: "Tag of the docker build", defaultValue: 'v1')
+        string(name: 'AppName', description: "Name of the Application", defaultValue: 'springboot')
     }
 
 
