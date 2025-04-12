@@ -21,6 +21,8 @@ pipeline{
             --add-opens jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
             --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
         '''.trim()
+        SONAR_SERVER = 'java-app-sonar' 
+        SONAR_PROJECT_KEY = 'java-app-cicd'
     }
 
 
