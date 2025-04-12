@@ -12,11 +12,19 @@ pipeline{
         MAVEN_OPTS = '--add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED'
     }
 
+    parameters{
+        choice(name: 'action', choices: 'create\ndelete', description: 'choose create/destroy')
+    }
+
 
     stages{
         
         stage('Git Checkout'){
             
+            when{
+                expression{ params.action == 'create' }
+            }
+
             steps{                
                 
                 script{
@@ -27,6 +35,10 @@ pipeline{
         }
 
         stage('Maven Test'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
             
             steps{                
                 
@@ -38,12 +50,31 @@ pipeline{
         }
 
         stage('Maven Int Test'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
             
             steps{                
                 
                 script{
                     
                     mvnIntegrationTest()
+                }
+            }
+        }
+
+        stage('Static Code Analysis: Sonarqube'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    staticCodeAnalysis()
                 }
             }
         }
