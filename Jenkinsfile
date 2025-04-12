@@ -19,6 +19,7 @@ pipeline{
             --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
             --add-opens jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
             --add-opens jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
         '''.trim()
     }
 
