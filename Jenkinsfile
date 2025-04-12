@@ -9,8 +9,9 @@ pipeline{
     }
 
     environment{
-        MAVEN_OPTS = '--add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED'
+        MAVEN_OPTS = '--add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED'
     }
+
 
     parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'choose create/destroy')
