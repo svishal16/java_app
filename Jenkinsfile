@@ -153,9 +153,9 @@ pipeline{
                 
                 script{
                     
-                 
-            }   dockerImagePush("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
-                }
+                    dockerImagePush("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }   
+            }
         }
 
         stage('Docker image Clean'){
@@ -168,9 +168,9 @@ pipeline{
                 
                 script{
                     
-                 
-            }   dockerImageCleanup("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
-                }
+                    dockerImageCleanup("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }   
+            }
         }
 
 
