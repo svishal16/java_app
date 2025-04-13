@@ -1,0 +1,179 @@
+@Library('my-first-shared-library') _
+
+pipeline{
+
+    agent any
+
+    tools{
+        maven 'MAVEN3.9'
+    }
+
+    environment {
+        MAVEN_OPTS = '''
+            --add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
+            --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+        '''.trim()
+        SONAR_SERVER = 'java-app-sonar' 
+        SONAR_PROJECT_KEY = 'java-app-cicd'
+        SONAR_PROJECT_NAME = 'java-app-cicd'
+    }
+
+
+
+    parameters{
+        choice(name: 'action', choices: 'create\ndelete', description: 'choose create/destroy')
+        string(name: 'aws_id', description: "AWS Account ID", defaultValue: '411357065850')
+        string(name: 'region', description: "Region of ECR", defaultValue: 'us-east-1')
+        string(name: 'ecr_repo', description: "Name of the ECR", defaultValue: 'svishal16')
+    }
+
+
+    stages{
+        
+        stage('Git Checkout'){
+            
+            when{
+                expression{ params.action == 'create' }
+            }
+
+            steps{                
+                
+                script{
+                    
+                    checkoutCode("https://github.com/svishal16/java_app.git", "main")
+                }
+            }
+        }
+
+        stage('Maven Test'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    mvnTest()
+                }
+            }
+        }
+
+        stage('Maven Int Test'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    mvnIntegrationTest()
+                }
+            }
+        }
+
+        stage('Static Code Analysis: Sonarqube'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    staticCodeAnalysis()
+                }
+            }
+        }
+
+        stage('Maven Build'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    mvnBuild()
+                }
+            }
+        }
+
+        stage('Docker image Build ECR'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    dockerBuildECR("${params.aws_id}", "${params.region}", "${params.ecr_repo}")
+                }
+            }
+        }
+
+        stage('Docker image Scan ECR'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    dockerImageScanECR("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }
+            }
+        }
+
+        stage('Docker image push ECR'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    dockerImagePushECR("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }   
+            }
+        }
+
+        stage('Docker image Clean'){
+
+            when{
+                expression{ params.action == 'create' }
+            }
+            
+            steps{                
+                
+                script{
+                    
+                    dockerImageCleanupECR("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }   
+            }
+        }
+
+    }
+
+}
+
