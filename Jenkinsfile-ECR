@@ -138,7 +138,7 @@ pipeline{
                 
                 script{
                     
-                    dockerImageScanECR("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                    dockerImageScanECR("${params.aws_id}", "${params.region}", "${params.ecr_repo}")
                 }
             }
         }
@@ -153,7 +153,7 @@ pipeline{
                 
                 script{
                     
-                    dockerImagePushECR("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                    dockerImagePushECR("${params.aws_id}", "${params.region}", "${params.ecr_repo}")
                 }   
             }
         }
@@ -168,7 +168,7 @@ pipeline{
                 
                 script{
                     
-                    dockerImageCleanupECR("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                    dockerImageCleanupECR("${params.aws_id}", "${params.region}", "${params.ecr_repo}")
                 }   
             }
         }
